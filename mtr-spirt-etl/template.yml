@@ -1,0 +1,70 @@
+#aws cloudformation deploy --template-file template.yml --stack-name mtr-hk-dev-spirt-etl --capabilities CAPABILITY_IAM
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: "AWS Glue Job Test"
+Resources:
+  MyJobRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - glue.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      Policies:
+        -
+          PolicyName: etl-glue-job-policy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - glue:*
+                  - cloudwatch:PutMetricData
+                  - s3:ListAllMyBuckets
+                  - s3:ListBucket
+                  - s3:GetBucketAcl
+                  - s3:GetBucketLocation
+                Resource: "*"
+              -
+                Effect: Allow
+                Action: 
+                  - logs:CreateLogStream
+                  - logs:CreateLogGroup
+                  - logs:PutLogEvents
+                Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws-glue/jobs/*
+              -
+                Effect: Allow
+                Action: 
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject
+                Resource:
+                  - arn:aws:s3:::mtr-hk-dev-raw-data-bucket/*
+                  - arn:aws:s3:::mtr-hk-code-bucket/*
+ 
+  MyJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: mtr-hk-dev-spirt-etl
+      Command:
+        Name: glueetl
+        ScriptLocation: "s3://mtr-hk-code-bucket/Spirt/dev/glue_job/mtr-hk-dev-spirt-etl.py"
+      DefaultArguments:
+        --job-bookmark-option: job-bookmark-enable
+        --additional-python-modules: pyarrow==2,awswrangler,xlsxwriter,fsspec==0.7.4,seaborn,PyPDF2,s3://mtr-hk-code-bucket/Spirt/dev/glue_job/lib/mtr_oeds-0.1-py3-none-any.whl
+        --extra-files: s3://mtr-hk-code-bucket/Spirt/dev/glue_job/config/spirt_config.cfg
+      GlueVersion: 2.0
+      WorkerType: Standard
+      NumberOfWorkers: 2
+      ExecutionProperty:
+        MaxConcurrentRuns: 1
+      MaxRetries: 0
+      Role: !Ref MyJobRole
