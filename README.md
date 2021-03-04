@@ -95,25 +95,39 @@ Serverless: Checking Stack update progress...
 ............................................
 Serverless: Stack update finished...
 Service Information
-service: aws-python-pynamodb-s3-sigurl
+service: mtr-hk-api
 stage: dev
-region: us-east-1
-stack: aws-python-pynamodb-s3-sigurl-dev
+region: ap-east-1
+stack: mtr-hk-api-dev
+resources: 65
 api keys:
   None
 endpoints:
-  POST - https://1xith51inb.execute-api.us-east-1.amazonaws.com/dev/asset
-  GET - https://1xith51inb.execute-api.us-east-1.amazonaws.com/dev/asset
-  GET - https://1xith51inb.execute-api.us-east-1.amazonaws.com/dev/asset/{asset_id}
-  PUT - https://1xith51inb.execute-api.us-east-1.amazonaws.com/dev/asset/{asset_id}
-  DELETE - https://1xith51inb.execute-api.us-east-1.amazonaws.com/dev/asset/{asset_id}
+  POST - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/ingest/{project}/{dataset}/{file-name}/{file-format}/{year}/{month}/{day}/{method}
+  GET - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/ingest/{project}/{dataset}
+  DELETE - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/ingest/{project}/{dataset}/{file-name}/{file-format}/{year}/{month}/{day}
+  GET - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/ingest/info
+  GET - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/query/{database}/{table}
+  GET - https://xmn1cu18tk.execute-api.ap-east-1.amazonaws.com/dev/query/info
 functions:
-  create: aws-python-pynamodb-s3-sigurl-dev-create
-  bucket: aws-python-pynamodb-s3-sigurl-dev-bucket
-  list: aws-python-pynamodb-s3-sigurl-dev-list
-  get: aws-python-pynamodb-s3-sigurl-dev-get
-  update: aws-python-pynamodb-s3-sigurl-dev-update
-  delete: aws-python-pynamodb-s3-sigurl-dev-delete
+  ingest: mtr-hk-dev-api-ingest
+  bucket: mtr-hk-dev-api-ingest-bucket
+  list: mtr-hk-dev-api-ingest-list
+  delete: mtr-hk-dev-api-ingest-delete
+  info: mtr-hk-dev-api-ingest-info
+  query: mtr-hk-dev-api-query
+  queryInfo: mtr-hk-dev-api-query-info
+layers:
+  None
+AddApiKey: Api key dev-vendor1 already exists, skipping creation.
+AddApiKey: Usage plan dev-vendor1-usage-plan already exists, skipping creation.
+AddApiKey: Usage plan dev-vendor1-usage-plan already has api key associated with it, skipping association.
+AddApiKey: Rest Api xmn1cu18tk already associated with the usage plan
+AddApiKey: Api key dev-vendor2 already exists, skipping creation.
+AddApiKey: Usage plan dev-vendor2-usage-plan already exists, skipping creation.
+AddApiKey: Usage plan dev-vendor2-usage-plan already has api key associated with it, skipping association.
+AddApiKey: Rest Api xmn1cu18tk already associated with the usage plan
+Serverless: Removing old service artifacts from S3...
 ```
 
 ## Usage

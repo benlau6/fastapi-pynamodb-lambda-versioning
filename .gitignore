@@ -6,6 +6,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# python
+__pycache__/
+
 # macos
 .DS_Store
 
