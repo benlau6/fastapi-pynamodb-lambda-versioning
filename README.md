@@ -1,5 +1,5 @@
 <!--
-title: 'AWS Serverless REST API with DynamoDB store and presigned URLs example in Python 3.6.'
+title: 'AWS Serverless REST API with DynamoDB store and presigned URLs example in Python 3.8.'
 description: 'This example demonstrates how to setup a RESTful Web Service allowing you to create, list, get, update and delete Assets. DynamoDB is used to store the data.'
 layout: Doc
 framework: v1
@@ -10,33 +10,32 @@ authorName: 'Bruce Edge'
 authorAvatar: 'https://avatars1.githubusercontent.com/u/499317?v=4&s=140'
 -->
 # Serverless REST API
-This example demonstrates how to setup a [RESTful Web Service](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_web_services) 
+This demonstrates how to setup a [RESTful Web Service](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_web_services) 
 using [Presigned URLs](http://boto3.readthedocs.io/en/latest/guide/s3.html?highlight=presigned#generating-presigned-urls) 
-to manage asset uploads and downloads. 
+to manage asset ingests and queries. 
 
 The initial POST creates an asset entry in dynamo and returns a presigned upload URL. 
-This is used to upload the asset without needing any credentials. 
+This is used to upload the asset with needing of API key. 
 An s3 event triggers another lambda method to mark the asset as "RECEIVED".
-One can then initiate a PUT to the asset's REST path to mark it as "UPLOADED"
 
-To download an asset, do a GET to the asset path to get a presigned download URL with an optional TTL.
-This URL can be used to retrieve the asset with no additional credentials. 
+To download an asset query, do a GET to the query path to get a presigned download URL with an optional TTL.
+This URL can be used to retrieve the asset with API key.
 
 Also provides "LIST" and "DELETE" methods. 
 
 DynamoDB is used to store the index and tracking data referring to the assets on s3.
-This is just an example and of course you could use any data storage as a backend.
+It is prefered but other data storage could also be used as a backend.
 
 ## Structure
-This service has a separate directory for all the assets operations. 
-For each operation exactly one file exists e.g. `assets/delete.py`. In each of these files there is exactly one function defined.
+This service have separate directories for all the ingest operations and query operations respectively.
+For each operation exactly one file exists e.g. `ingest/delete.py`. In each of these files there is exactly one function defined.
 ### Model
-The idea behind the `assets` directory is that in case you want to create a service containing multiple resources e.g. users, notes, 
+The idea behind the `ingest` directory is that in case you want to create a service containing multiple resources e.g. users, notes, 
 comments you could do so in the same service. 
 While this is certainly possible you might consider creating a separate service for each resource. 
 It depends on the use-case and your preference.
 ### API GW Integration model
-All methods use `lambda` integration as that reduces the API GW interference in the payload.
+All methods use `lambda-proxy` integration as that reduces the API GW interference in the payload.
 ### Logging
 The log_cfg.py is an alternate way to setup the python logging to be more friendly wth AWS lambda.
 The lambda default logging config is to not print any source file or line number which makes it harder to correleate with the source.
@@ -53,18 +52,16 @@ Default format uses:
 ```
 
 ### Notes
-Initial scaffold copied from the aws-python-rest-api-with-pynamodb example.
-
-The PUT method to mark the asset as UPLOADED is somewhat redundant as the S3 event that marks uploads as RECEIVED should be sufficient for most cases.
-However the goal was to use a PUT method to mark it received, so the PUT marks a RECEIVED asset as UPLOADED.
-That said, there is no distinction between UPLOADED vs RECEIVED anywhere in the example.
-
-The DELETE method does a `soft delete` which marks the asset as deleted without removing the s3 key. 
-If the file on s3 is deleted, an event is generated which does fully delete the asset in dynamo as well.
+The DELETE method does a `hard delete` which removes the s3 object, but the asset in dynamo is reserverd and marked as DELETED for audit.
 
 ## Setup
 
 ```bash
+npm install -g serverless
+
+git clone https://github.com/benlau6/mtr-hk-api.git
+cd ./mtr-hk-api
+
 npm install
 ```
 
@@ -73,7 +70,7 @@ npm install
 In order to deploy the endpoint simply run
 
 ```bash
-serverless deploy
+sls deploy
 ```
 
 The expected result should be similar to:
@@ -128,6 +125,29 @@ AddApiKey: Usage plan dev-vendor2-usage-plan already exists, skipping creation.
 AddApiKey: Usage plan dev-vendor2-usage-plan already has api key associated with it, skipping association.
 AddApiKey: Rest Api xmn1cu18tk already associated with the usage plan
 Serverless: Removing old service artifacts from S3...
+```
+
+### Upload a file to the URL
+
+In order to deploy the endpoint simply run
+
+```bash
+sls deploy -f $function
+```
+
+The expected result should be similar to:
+
+```bash
+%> sls deploy -f $function                                                                            
+Serverless: Parsing Python requirements.txt
+Serverless: Installing required Python packages for runtime python3.6...
+Serverless: Linking required Python packages...
+Serverless: Packaging function: $function...
+Serverless: Excluding development dependencies...
+Serverless: Injecting required Python packages to package...
+Serverless: Uploading function: info (747.69 KB)...
+Serverless: Successfully deployed function: info
+Serverless: Configuration did not change. Skipping function configuration update.
 ```
 
 ## Usage
