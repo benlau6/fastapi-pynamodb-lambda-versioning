@@ -1,0 +1,40 @@
+{
+    "mtr-hk-dev-fastapi-table": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"1"},
+                    "name": {"S":"jack"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss1024024_lc256005675_km30.7923_fr6089_36244_20210217_202456.png"},
+                    "status": {"S":"fault"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"2"},
+                    "name": {"S":"ben"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss1026725_lc256681259_km30.1171_fr6105_36279_20210217_202549.png"},
+                    "status": {"S":"normal"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"3"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        }
+    ]
+}

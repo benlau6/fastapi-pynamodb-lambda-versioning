@@ -1,81 +1,35 @@
-service: mtr-hk-api
+service: mtr-hk-fastapi
 #aws dynamodb batch-write-item --request-items file://initial_data.json
 #aws invoke -f function -p event.json
 #aws deploy -f function
 
 plugins:
   - serverless-python-requirements
-  - serverless-add-api-key
 
 package:
-  exclude:
-    - node_modules/**
-    - .idea/**
-    - .requirements/**
-    - env/**
-    - README.md
-    - package.json
-    - package-lock.json
-    - requirements.txt
-    - initial_data.json
-    - bucket.json
-    - event.json
-    - event2.json
-    - .vscode/**
-    - swagger.yml
-    - mtr-spirt-etl/**
+  patterns:
+    - "!node_modules/**"
+    - "!.requirements/**"
+    - "!env/**"
+    - "!README.md"
+    - "!package.json"
+    - "!package-lock.json"
+    - "!requirements.txt"
+    - "!initial_data.json"
+    - "!event.json"
+    - "!.vscode/**"
 
 custom:
   pythonRequirements:
-    noDeploy:
-      - boto3
-      - botocore
-      - docutils
-      - jmespath
-      - pip
-      - python-dateutil
-      - s3transfer
-      - setuptools
-      - six
-  app_acronym: mtr-hk
+    dockerizePip: non-linux
   default_stage: dev
   stage: ${opt:stage, self:custom.default_stage}
-  stack_name: ${self:custom.app_acronym}-${self:custom.stage}-api
+  stack_name: mtr-hk-${self:custom.stage}-fastapi
   region: ${opt:region, self:provider.region}
   deletion_policy: Delete
-  apiKeys:
-    dev:
-      - name: ${self:custom.stage}-vendor1
-        value: 93wMRRhvmDOIM0ntmeM82SV8LgKEfxi7PrSqmjK1
-      - name: ${self:custom.stage}-vendor2
-        value: 4igRGSaV121fjJ665C6rb7kLfg06djOj9ctUvEF5
-    prod:
-      - name: ${self:custom.stage}-template
-  # for upload
-  dynamodb_table: ${self:custom.stack_name}-ingest
-  dynamodb_table_path: ${self:custom.stack_name}-ingest-path
-  dynamodb_table_key: ${self:custom.stack_name}-ingest-key
-  dynamodb_arn: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table}
-  dynamodb_arn_path: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table_path}
-  dynamodb_arn_key: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table_key}
-  # for query
-  dynamodb_table_query: ${self:custom.stack_name}-query
-  dynamodb_table_query_key: ${self:custom.stack_name}-query-key
-  dynamodb_arn_query: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table_query}  
-  dynamodb_arn_query_key: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table_query_key}
   dynamodb_host: https://dynamodb.${self:custom.region}.amazonaws.com
-  dynamodb_index: key_time_LSI
-  dynamodb_index_query: key_status_GSI
-  s3_bucket: ${opt:s3_bucket, self:custom.app_acronym}-${self:custom.stage}-api-bucket
-  s3_bucket_query: aws-athena-query-results-834356164989-ap-east-1
-  #s3_bucket_arn: arn:aws:s3:::${self:custom.s3_bucket}
-  #s3_role_resource: ${self:custom.s3_bucket_arn}/*
-  
-  # Put this here rather than in code (presigned URL TTL)
-  url_default_ttl: 60
-  query_default_ttl: 10
-  query_concurrent_limit: 10
-  query_default_waiting_time: 1
+  dynamodb_table: ${self:custom.stack_name}-table
+  dynamodb_arn: arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.dynamodb_table}
 
 provider:
   name: aws
@@ -83,7 +37,7 @@ provider:
   region: ap-east-1
   lambdaHashingVersion: 20201221
   profile: mtr
-  apiName: ${self:custom.app_acronym}-${self:custom.stage}-api-gateway
+  apiName: ${self:custom.stack_name}-api-gateway
   deploymentBucket:
     name: mtr-hk-code-bucket
   deploymentPrefix: serverless
@@ -96,300 +50,57 @@ provider:
         burstLimit: 200
         rateLimit: 100
   environment:
-    # for upload
-    DYNAMODB_TABLE: ${self:custom.dynamodb_table}
-    DYNAMODB_TABLE_KEY: ${self:custom.dynamodb_table_key}
-    DYNAMODB_TABLE_PATH: ${self:custom.dynamodb_table_path}
-    # for query
-    DYNAMODB_TABLE_QUERY: ${self:custom.dynamodb_table_query}
-    DYNAMODB_TABLE_QUERY_KEY: ${self:custom.dynamodb_table_query_key}
     DYNAMODB_HOST: ${self:custom.dynamodb_host}
+    DYNAMODB_TABLE: ${self:custom.dynamodb_table}
     REGION: ${self:custom.region}
-    S3_BUCKET: ${self:custom.s3_bucket}
-    S3_BUCKET_QUERY: ${self:custom.s3_bucket_query}
-    URL_DEFAULT_TTL: ${self:custom.url_default_ttl}
-    QUERY_DEFAULT_TTL: ${self:custom.query_default_ttl}
-    DYNAMODB_INDEX: ${self:custom.dynamodb_index}
-    DYNAMODB_INDEX_QUERY: ${self:custom.dynamodb_index_query}
-    QUERY_CONCURRENT_LIMIT: ${self:custom.query_concurrent_limit}
-    QUERY_DEFAULT_WAITING_TIME: ${self:custom.query_default_waiting_time}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:DescribeTable
-      Resource: 
-        - ${self:custom.dynamodb_arn}
-        - ${self:custom.dynamodb_arn}/index/*
-        - ${self:custom.dynamodb_arn_key}
-        - ${self:custom.dynamodb_arn_path}
-        - ${self:custom.dynamodb_arn_query_key}
-        - ${self:custom.dynamodb_arn_query}
-        - ${self:custom.dynamodb_arn_query}/index/*
-
-    - Effect: Allow
-      Action:
-        - s3:*
-      Resource: 
-        - '*'
-
-    - Effect: Allow
-      Action:
-        - athena:*
-      Resource:
-        - '*'
-
-    - Effect: Allow
-      Action:
-        - glue:*
-      Resource:
-        - '*'
+    STAGE: ${self:custom.stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:DescribeTable
+          Resource: 
+            - ${self:custom.dynamodb_arn}
 
 # Lambda Function Defination 
 functions:
-  ingest:
-    handler: ingest/ingest.ingest
+  app:
+    handler: app.main.handler
     package: {}
-    name: ${self:custom.stack_name}-ingest
-    description: Generate a presigned URL for PUT upload / Direct upload
+    name: ${self:custom.stack_name}-app
+    description: fastapi
     timeout: 10
     events:
       - http:
-          path: ingest/{project}/{dataset}/{file-name}/{file-format}/{year}/{month}/{day}/{method}
-          method: post
+          path: /
+          method: ANY
           cors: true
-          private: true
-          request:
-            parameters:
-              paths:
-                project: true
-                dataset: true
-                file-name: true
-                file-format: true
-                method: true
-                year: true
-                month: true
-                day: true
-
-  bucket:
-    handler: ingest/bucket.event
-    package: {}
-    name: ${self:custom.stack_name}-ingest-bucket
-    description: Called by s3 create/remove events to manage asset state in dynamodb
-    timeout: 10
-    events:
-      - s3:
-          bucket: ${self:custom.s3_bucket}
-          existing: true
-          event: s3:ObjectCreated:*
-
-  list:
-    handler: ingest/list.asset_list
-    package: {}
-    name: ${self:custom.stack_name}-ingest-list
-    description: List all assets -> Generate create record of specific day
-    events:
       - http:
-          path: ingest/{project}/{dataset}
-          method: get
+          path: /{proxy+}
+          method: ANY
           cors: true
-          request:
-            parameters:
-              querystrings: 
-                date: true
-                source: true
-              paths:
-                project: true
-                dataset: true
-
-  delete:
-    handler: ingest/delete.delete
-    package: {}
-    name: ${self:custom.stack_name}-ingest-delete
-    description: Delete an asset by <project>, <dataset>, <file-name> and <file-format>
-    events:
-      - http:
-          path: ingest/{project}/{dataset}/{file-name}/{file-format}/{year}/{month}/{day}
-          method: delete
-          cors: true
-          request:
-            parameters:
-              paths:
-                project: true
-                dataset: true
-                file-name: true
-                file-format: true
-                year: true
-                month: true
-                day: true
-
-  info:
-    handler: ingest/info.info
-    package: {}
-    name: ${self:custom.stack_name}-ingest-info
-    description: Get info of corresponding api-key, info from dynamodb columns
-    events:
-      - http:
-          path: ingest/info
-          method: get
-          cors: true
-          private: true
-
-  query:
-    handler: query/query.query
-    package: {}
-    name: ${self:custom.stack_name}-query
-    description: To query any dataset
-    timeout: 28
-    events:
-      - http:
-          path: 'query/{database}/{table}'
-          method: get
-          cors: true
-          private: true
-          request:
-            parameters:
-              querystrings: 
-                where: true
-              paths:
-                database: true
-                table: true
-
-  queryInfo:
-    handler: query/info.info
-    package: {}
-    name: ${self:custom.stack_name}-query-info
-    description: To get query info
-    timeout: 10
-    events:
-      - http:
-          path: 'query/info'
-          method: get
-          cors: true
-          private: true
-
 
 resources:
   Resources:
-# Comment assetDynamoDbTable if using existing table
-    dataPathDynamoDbTable:
+# Comment dataDynamoDbTable if using existing table
+    dataDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: ${self:custom.deletion_policy}
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: project
-            AttributeType: S
-          -
-            AttributeName: dataset
+            AttributeName: item_id
             AttributeType: S
         KeySchema:
           -
-            AttributeName: project
-            KeyType: HASH
-          -
-            AttributeName: dataset
-            KeyType: RANGE           
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.dynamodb_table_path}
-    apiKeyDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: ${self:custom.deletion_policy}
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: api_key
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: api_key
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.dynamodb_table_key}
-    ingestDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: ${self:custom.deletion_policy}
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: api_key
-            AttributeType: S
-          -
-            AttributeName: s3_path
-            AttributeType: S
-          -
-            AttributeName: created_at
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: api_key
-            KeyType: HASH
-          -
-            AttributeName: s3_path
-            KeyType: RANGE
-        LocalSecondaryIndexes: 
-          - 
-            IndexName: ${self:custom.dynamodb_index}
-            KeySchema: 
-              - 
-                AttributeName: api_key
-                KeyType: HASH
-              - 
-                AttributeName: created_at
-                KeyType: RANGE
-            Projection: 
-              ProjectionType: ALL
+            AttributeName: item_id
+            KeyType: HASH        
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:custom.dynamodb_table}
-################## for api ingestion
-    queryKeyDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: ${self:custom.deletion_policy}
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: api_key
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: api_key
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.dynamodb_table_query_key}
-    queryDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: ${self:custom.deletion_policy}
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: query
-            AttributeType: S
-          -
-            AttributeName: api_key
-            AttributeType: S
-          -
-            AttributeName: state
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: query
-            KeyType: HASH
-        GlobalSecondaryIndexes: 
-          - 
-            IndexName: ${self:custom.dynamodb_index_query}
-            KeySchema: 
-              - 
-                AttributeName: api_key
-                KeyType: HASH
-              - 
-                AttributeName: state
-                KeyType: RANGE
-            Projection: 
-              ProjectionType: KEYS_ONLY
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:custom.dynamodb_table_query}

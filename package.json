@@ -5,10 +5,10 @@
   "author": "Bruce Edge",
   "license": "MIT",
   "dependencies": {
-    "serverless-plugin-scripts": "^1.0.2",
-    "serverless-python-requirements": "^5.0.1"
+    "serverless-plugin-scripts": "^1.0.2"
   },
   "devDependencies": {
-    "serverless-add-api-key": "^4.2.0"
+    "serverless-add-api-key": "^4.2.0",
+    "serverless-python-requirements": "^5.1.1"
   }
 }
