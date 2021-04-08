@@ -14,26 +14,6 @@ router = APIRouter(
     tags=["items"]
 )
 
-fake_items_db = [
-    {
-        "item_id": 1, 
-        "name": 'Jack', 
-        "image": "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
-        "status": -1,
-        "created_at": datetime.now().astimezone(),
-        "updated_at": datetime.now().astimezone()
-
-    },
-    {
-        "item_id": 2, 
-        "name": 'Ben', 
-        "image": "https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg",
-        "status": -1,
-        "created_at": datetime.now().astimezone(),
-        "updated_at": datetime.now().astimezone()
-    }
-]
-
 
 class Item(BaseModel):
     name: str
