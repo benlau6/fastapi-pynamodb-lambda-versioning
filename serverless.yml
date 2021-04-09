@@ -18,6 +18,10 @@ package:
     - "!initial_data.json"
     - "!event.json"
     - "!.vscode/**"
+    - "!.env"
+    - "!.nginx/**"
+    - "!docker-compose.yml"
+    - "!Dockerfile"
 
 custom:
   pythonRequirements:
