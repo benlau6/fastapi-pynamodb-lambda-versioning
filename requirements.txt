@@ -2,3 +2,4 @@ pynamodb
 fastapi
 mangum
 graphene
+boto3

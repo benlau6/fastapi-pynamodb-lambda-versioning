@@ -20,11 +20,7 @@ class State(Enum):
 class ItemModel(Model):
     class Meta:
         table_name = os.environ['DYNAMODB_TABLE']
-        if 'ENV' in os.environ:
-            host = 'http://localhost:8000'
-        else:
-            region = os.environ['REGION']
-            host = os.environ['DYNAMODB_HOST']
+        region = os.environ['REGION']
         billing_mode = 'PAY_PER_REQUEST'
 
     item_id = UnicodeAttribute(hash_key=True)
