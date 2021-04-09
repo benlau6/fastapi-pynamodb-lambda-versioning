@@ -2,12 +2,9 @@ from fastapi import APIRouter
 from typing import Optional
 from pydantic import BaseModel
 
-from datetime import datetime
-
-import http.client as httplib
-from pynamodb.exceptions import DoesNotExist, DeleteError
 from .db_model import ItemModel
-import json
+from pynamodb.exceptions import DoesNotExist, DeleteError
+import http.client as httplib
 
 router = APIRouter(
     prefix="/items",

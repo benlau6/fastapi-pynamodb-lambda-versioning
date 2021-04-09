@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from mangum import Mangum
 
-from .routers import items
+from .routers import items, graphql
 from fastapi.middleware.cors import CORSMiddleware
 
 import os
@@ -22,7 +22,7 @@ app.add_middleware(
 
 
 app.include_router(items.router)
-
+app.include_router(graphql.router)
 
 @app.get("/")
 def read_root():

@@ -1,3 +1,4 @@
 pynamodb
 fastapi
 mangum
+graphene
