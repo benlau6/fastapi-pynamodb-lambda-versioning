@@ -12,13 +12,14 @@ services:
       - traefik.enable=true
       - traefik.http.services.app.loadbalancer.server.port=3000
       - traefik.http.routers.app-http.entrypoints=http
-      - traefik.http.routers.app-http.rule=Host(`127.0.0.1`)
+      - traefik.http.routers.app-http.rule=Host(`127.0.0.1`) && PathPrefix(`/dev`)
       - traefik.http.middlewares.api-strip-prefix.stripprefix.prefixes=/dev
       - traefik.http.routers.app-http.middlewares=api-strip-prefix@docker
   reverse-proxy:
-    image: traefik:v2.4
+    image: traefik
     ports:
       - 80:80
+      - 8080:8080
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     command:
@@ -27,7 +28,7 @@ services:
       - --entrypoints.http.address=:80
       - --accesslog
       - --log
-
+      - --api.insecure=true
 
   #nginx:
   #  depends_on:
