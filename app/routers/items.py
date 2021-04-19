@@ -1,10 +1,13 @@
+import http.client as httplib
+import uuid
+from typing import List, Optional
+
 from fastapi import APIRouter
-from typing import Optional
 from pydantic import BaseModel
+from pynamodb.exceptions import DeleteError, DoesNotExist
 
 from .db_model import ItemModel
-from pynamodb.exceptions import DoesNotExist, DeleteError
-import http.client as httplib
+from .utils import get_updated_at
 
 router = APIRouter(
     prefix="/items",
@@ -12,47 +15,67 @@ router = APIRouter(
 )
 
 
-class Item(BaseModel):
+class ItemBase(BaseModel):
     name: str
     image: str
-    status: int
+    status: str
+    created_at: str
+    updated_at: str
+
+class ItemIn(ItemBase):
+    item_id: str = uuid.uuid4()
+
+class ItemOut(ItemBase):
+    item_id: str
+
+class ItemOutAntd(BaseModel):
+    data: List[ItemOut]
+
+class ItemUpdate(BaseModel):
+    status: str
+
+class ItemSort(BaseModel):
+    updated_at: str
 
 
-@router.get("/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+@router.get("/{item_id}", response_model=ItemOut)
+def read_item(item_id: str, q: Optional[str] = None):
+    item = ItemModel.get(item_id)
+    return dict(item)
 
 
-@router.put("/{item_id}")
-def update_item(item_id: int, item: Item):
-    return {"item_name": item.name, "item_id": item_id}
+@router.patch("/{item_id}", response_model=ItemOut)
+def update_item(item_id: str, new_item:ItemUpdate):
+    item = ItemModel.get(item_id)
+    item.update(
+        actions=[
+            ItemModel.status.set(new_item.status),
+            ItemModel.updated_at.set(get_updated_at())
+        ]
+    )
+    return dict(item)
 
 
-@router.get("/")
-def read_items(q: Optional[str] = None):
-    try:
-        res = ItemModel.scan()
-    except DoesNotExist:
-        return {
-            'statusCode': httplib.NOT_FOUND,
-            'body': {
-                'error_message': 'not found'
-            }
-        }
+@router.get("/", response_model=ItemOutAntd)
+def read_items(created_at: Optional[str] = None, updated_at: Optional[str] = None):
+    items = ItemModel.scan()
+    items = [dict(item) for item in items]
+    
+    if updated_at:
+        if updated_at == 'ascend':
+            items = sorted(items, key=lambda k: k['updated_at'])
+        elif updated_at == 'descend':
+            items = sorted(items, key=lambda k: k['updated_at'], reverse=True)
+    elif created_at:
+        if created_at == 'ascend':
+            items = sorted(items, key=lambda k: k['created_at'])
+        elif created_at == 'descend':
+            items = sorted(items, key=lambda k: k['created_at'], reverse=True)
 
-    results = [dict(result) for result in res]
-
-    return {
-        "data": results
-    }
+    return {'data': items}
+    #return {'data': [dict(item) for item in items]}
 
 
-@router.post("/")
-def insert_item(item: Item):
-    return {
-        "message": "Created",
-        "item_id": 1, 
-        "name": item.name, 
-        "image": item.image,
-        "status": item.status
-    }
+@router.post("/", response_model=ItemOut)
+def insert_item(item: ItemIn):
+    return item

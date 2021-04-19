@@ -35,6 +35,198 @@
                     "updated_at": {"S":"2021-04-08 14:52:10"}
                 }
             }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"4"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"5"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"6"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"7"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"8"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"9"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"10"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"11"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"12"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"13"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"14"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"15"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"16"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"17"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"18"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "item_id": {"S":"19"},
+                    "name": {"S":"emma"},
+                    "image": {"S":"https://mtr-hk-dev-oris-website.s3.ap-east-1.amazonaws.com/ss612510_lc153128060_km1.1641_fr3646_22338_20210217_174529.png"},
+                    "status": {"S":"undetermined"},
+                    "created_at": {"S":"2021-04-08 14:52:10"},
+                    "updated_at": {"S":"2021-04-08 14:52:10"}
+                }
+            }
         }
     ]
 }
