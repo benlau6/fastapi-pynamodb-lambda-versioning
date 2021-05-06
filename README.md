@@ -1,14 +1,3 @@
-<!--
-title: 'AWS Serverless REST API with DynamoDB store and presigned URLs example in Python 3.8.'
-description: 'This example demonstrates how to setup a RESTful Web Service. DynamoDB is used to store the data.'
-layout: Doc
-framework: v1
-platform: AWS
-language: Python
-authorLink: 'https://github.com/bedge'
-authorName: 'Bruce Edge'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/499317?v=4&s=140'
--->
 # Serverless REST API
 This demonstrates how to setup a [RESTful Web Service](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_web_services) 
 
@@ -31,11 +20,15 @@ Default format uses:
 
 ## Setup
 
+Download node.js LTS version from https://nodejs.org/en/
+Install node.js and restart terminal if it is opened
+Then run commands below:
+
 ```bash
 npm install -g serverless
 
-git clone https://github.com/benlau6/mtr-hk-api.git
-cd ./mtr-hk-api
+git clone https://github.com/benlau6/fastapi-pynamodb-lambda-version.git
+cd ./fastapi-pynamodb-lambda-version
 
 npm install
 ```
@@ -48,12 +41,20 @@ In order to deploy the endpoint simply run
 sls deploy
 ```
 
-### Upload a file to the URL
+### Function update
 
-In order to deploy the endpoint simply run
+In order to update the function run
 
 ```bash
 sls deploy -f $function
+```
+
+### Function local test
+
+In order to test the function locally, create a event.json in examples folder, then run
+
+```bash
+aws invoke -f $function -p examples/event.json
 ```
 
 ## Docker
