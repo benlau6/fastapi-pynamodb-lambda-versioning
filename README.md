@@ -20,8 +20,8 @@ Default format uses:
 
 ## Setup
 
-Download node.js LTS version from https://nodejs.org/en/
-Install node.js and restart terminal if it is opened
+Download node.js LTS version from https://nodejs.org/en/ \
+Install node.js and restart terminal if it is opened \
 Then run commands below:
 
 ```bash
