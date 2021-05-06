@@ -1,3 +1,5 @@
+### This repository has a complexer app folder structure for bigger application and easier management.
+
 # Serverless REST API
 This demonstrates how to setup a [RESTful Web Service](https://en.wikipedia.org/wiki/Representational_state_transfer#Applied_to_web_services) 
 
