@@ -1,5 +1,5 @@
 {
-    "mtr-hk-dev-fastapi-table": [
+    "fastapi-table": [
         {
             "PutRequest": {
                 "Item": {
